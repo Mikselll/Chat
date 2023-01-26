@@ -1,0 +1,22 @@
+{
+  "name": "@hexlet/code",
+  "version": "1.0.0",
+  "description": "[![Actions Status](https://github.com/Mikselll/frontend-project-12/workflows/hexlet-check/badge.svg)](https://github.com/Mikselll/frontend-project-12/actions)\r [![Maintainability](https://api.codeclimate.com/v1/badges/1f11d64d44dd9a675f6f/maintainability)](https://codeclimate.com/github/Mikselll/frontend-project-12/maintainability)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mikselll/frontend-project-12.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Mikselll/frontend-project-12/issues"
+  },
+  "homepage": "https://github.com/Mikselll/frontend-project-12#readme",
+  "dependencies": {
+    "@hexlet/chat-server": "^1.1.6"
+  }
+}
