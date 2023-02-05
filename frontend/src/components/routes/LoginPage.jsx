@@ -1,18 +1,29 @@
 import { useFormik } from 'formik';
 import { Form, Button } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import React from 'react';
-import shema from '../validation/index.js';
-import image from '../assets/avatar.jpg';
+import shema from '../../validation/index.js';
+import image from '../../assets/avatar.jpg';
+import useAuth from '../../hook/index.js';
 
 const Login = () => {
+  const auth = useAuth();
+  const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
       username: '',
       password: '',
     },
     validationSchema: shema,
-    onSubmit: (values) => {
-      console.log(values);
+    onSubmit: async (values) => {
+      try {
+        const { data } = await axios.post('/api/v1/login', values);
+        auth.logIn(data);
+        navigate('/');
+      } catch (err) {
+        console.error(err.message);
+      }
     },
   });
 
@@ -25,7 +36,7 @@ const Login = () => {
               <div className="col-12 col-md-6 d-flex align-items-center justify-content-center">
                 <img src={image} className="rounded-circle" alt="Войти" />
               </div>
-              <Form className="col-12 col-md-6 mt-3 mt-mb-0">
+              <Form className="col-12 col-md-6 mt-3 mt-mb-0" onSubmit={formik.handleSubmit}>
                 <h1 className="text-center mb-4">Войти</h1>
                 <Form.Group className="form-floating mb-3">
                   <Form.Control
@@ -37,7 +48,7 @@ const Login = () => {
                     value={formik.values.username}
                     onChange={formik.handleChange}
                   />
-                  <Form.Label for="username">Ваш ник</Form.Label>
+                  <Form.Label htmlFor="username">Ваш ник</Form.Label>
                 </Form.Group>
                 <Form.Group className="form-floating mb-4">
                   <Form.Control
@@ -49,7 +60,7 @@ const Login = () => {
                     value={formik.values.password}
                     onChange={formik.handleChange}
                   />
-                  <Form.Label for="password">Пароль</Form.Label>
+                  <Form.Label htmlFor="password">Пароль</Form.Label>
                 </Form.Group>
                 <Button
                   type="submit"
