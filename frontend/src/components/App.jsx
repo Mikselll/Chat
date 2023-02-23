@@ -4,7 +4,7 @@ import {
 } from 'react-router-dom';
 import Login from './routes/LoginPage.jsx';
 import NotFound from './routes/PageNotFound.jsx';
-import Chat from './routes/ChatPage.jsx';
+import Chat from './routes/chat/ChatPage.jsx';
 import AuthContext from '../context/index.js';
 import useAuth from '../hook/index.js';
 

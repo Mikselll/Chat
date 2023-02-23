@@ -1,8 +1,10 @@
 import * as yup from 'yup';
 
-const schema = yup.object({
+export const loginSchema = yup.object({
   username: yup.string().required('Required'),
   password: yup.string().required('Required'),
 });
 
-export default schema;
+export const messageSchema = yup.object({
+  text: yup.string().required('Required'),
+});

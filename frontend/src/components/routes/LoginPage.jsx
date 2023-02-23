@@ -1,21 +1,24 @@
-import { useFormik } from 'formik';
-import { Form, Button } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import React from 'react';
-import shema from '../../validation/index.js';
-import image from '../../assets/avatar.jpg';
+import {
+  Form, Button, Container, Row, Card, Col,
+} from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
+import { useFormik } from 'formik';
+import axios from 'axios';
 import useAuth from '../../hook/index.js';
+import image from '../../assets/avatar.jpg';
+import { loginSchema } from '../../validation/index.js';
 
 const Login = () => {
-  const auth = useAuth();
   const navigate = useNavigate();
+  const auth = useAuth();
+
   const formik = useFormik({
     initialValues: {
       username: '',
       password: '',
     },
-    validationSchema: shema,
+    validationSchema: loginSchema,
     onSubmit: async (values) => {
       try {
         const { data } = await axios.post('/api/v1/login', values);
@@ -28,14 +31,14 @@ const Login = () => {
   });
 
   return (
-    <div className="container-fluid h-100">
-      <div className="row justify-content-center align-content-center h-100">
-        <div className="col-12 col-md-8 col-xxl-6">
-          <div className="card shadow-sm">
-            <div className="card-body row p-5">
-              <div className="col-12 col-md-6 d-flex align-items-center justify-content-center">
+    <Container className="h-100" fluid>
+      <Row className="justify-content-center align-content-center h-100">
+        <Col xs={12} md={8} xxl={6}>
+          <Card className="shadow-sm">
+            <Card.Body as={Row} className="p-5">
+              <Col xs={12} md={6} className="d-flex align-items-center justify-content-center">
                 <img src={image} className="rounded-circle" alt="Войти" />
-              </div>
+              </Col>
               <Form className="col-12 col-md-6 mt-3 mt-mb-0" onSubmit={formik.handleSubmit}>
                 <h1 className="text-center mb-4">Войти</h1>
                 <Form.Group className="form-floating mb-3">
@@ -64,23 +67,23 @@ const Login = () => {
                 </Form.Group>
                 <Button
                   type="submit"
-                  className="w-100 mb-3"
                   variant="outline-primary"
+                  className="w-100 mb-3"
                 >
                   Войти
                 </Button>
               </Form>
-            </div>
-            <div className="card-footer p-4">
+            </Card.Body>
+            <Card.Footer className="p-4">
               <div className="text-center">
                 <span>Нет аккаунта?</span>
                 <a href="/NotFound">Регистрация</a>
               </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+            </Card.Footer>
+          </Card>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 
