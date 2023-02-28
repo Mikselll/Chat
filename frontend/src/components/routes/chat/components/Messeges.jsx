@@ -11,6 +11,7 @@ const Messages = () => {
   const messagesList = useSelector(messagesSelectors.selectAll);
   const currentMessages = messagesList.filter(({ channelId }) => channelId === currentChannelId);
   const messagesLength = currentMessages.length;
+  console.log(messagesList);
 
   return (
     <>

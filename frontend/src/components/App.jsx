@@ -1,12 +1,15 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   BrowserRouter, Routes, Route, Navigate, Outlet,
 } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import Login from './routes/LoginPage.jsx';
 import NotFound from './routes/PageNotFound.jsx';
 import Chat from './routes/chat/ChatPage.jsx';
 import AuthContext from '../context/index.js';
 import useAuth from '../hook/index.js';
+import socket from '../socket.js';
+import { addMessage } from '../slices/messagesSlice.js';
 
 const AuthProvider = ({ children }) => {
   const currentUsername = JSON.parse(localStorage.getItem('user'));
@@ -30,18 +33,29 @@ const PrivateRoute = () => {
   return auth.user ? <Outlet /> : <Navigate to="/login" />;
 };
 
-const App = () => (
-  <AuthProvider>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<PrivateRoute />}>
-          <Route index="true" element={<Chat />} />
-        </Route>
-        <Route path="/login" element={<Login />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </BrowserRouter>
-  </AuthProvider>
-);
+const App = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    socket.on('newMessage', (payload) => {
+      console.log(payload)
+      dispatch(addMessage(payload));
+    });
+  }, [dispatch]);
+
+  return (
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<PrivateRoute />}>
+            <Route index="true" element={<Chat />} />
+          </Route>
+          <Route path="/login" element={<Login />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
+  );
+};
 
 export default App;

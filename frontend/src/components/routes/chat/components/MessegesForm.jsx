@@ -1,15 +1,12 @@
 import React from 'react';
 import { Form, InputGroup, Button } from 'react-bootstrap';
-import { useSelector, useDispatch } from 'react-redux';
-import { uniqueId } from 'lodash';
+import { useSelector } from 'react-redux';
 import { useFormik } from 'formik';
 import useAuth from '../../../../hook/index.js';
+import socket from '../../../../socket.js';
 import { messageSchema } from '../../../../validation/index.js';
-import { addMessage } from '../../../../slices/messagesSlice.js';
 
 const MessagesForm = () => {
-  const dispatch = useDispatch();
-  const generateId = uniqueId();
   const auth = useAuth();
   const { username } = auth.user;
   const currentChannelId = useSelector(({ channels }) => channels.currentChannelId);
@@ -20,12 +17,7 @@ const MessagesForm = () => {
     },
     validationSchema: messageSchema,
     onSubmit: ({ text }, { resetForm }) => {
-      dispatch(addMessage({
-        text,
-        username,
-        channelId: currentChannelId,
-        id: generateId,
-      }));
+      socket.emit('newMessage', { text, username, channelId: currentChannelId });
       resetForm();
     },
   });
