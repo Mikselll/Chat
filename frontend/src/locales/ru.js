@@ -1,0 +1,56 @@
+export default {
+  translation: {
+    login: {
+      title: 'Войти',
+      username: 'Ваш ник',
+      password: 'Пароль',
+      button: 'Войти',
+      footerText: 'Нет аккаунта ? ',
+      footerLink: 'Регистрация',
+    },
+    signup: {
+      title: 'Регистрация',
+      username: 'Имя пользователя',
+      password: 'Пароль',
+      confirmPassword: 'Подтвердите пароль',
+      button: 'Зарегистрироваться',
+    },
+    channels: {
+      title: 'Каналы',
+      control: 'Управление каналом',
+      remove: 'Удалить',
+      rename: 'Переименовать',
+    },
+    messages: {
+      message_one: '{{count}} сообщение',
+      message_few: '{{count}} сообщения',
+      message_many: '{{count}} сообщений',
+      typeMessage: 'Новое сообщение',
+      newMessage: 'Введите сообщение...',
+      button: 'Отправить',
+    },
+    modals: {
+      addTitle: 'Добавить канал',
+      removeTitle: 'Удалить канал',
+      removeConfirm: 'Уверены ?',
+      renameTitle: 'Переименовать канал',
+      cancelButton: 'Отменить',
+      sendButton: 'Отправить',
+      removeButton: 'Удалить',
+      lable: 'Имя канала',
+    },
+    header: {
+      brand: 'Hexlet Chat',
+      button: 'Выйти',
+    },
+    errors: {
+      required: 'Обязательно поле',
+      minMax: 'От 3 до 20 символов',
+      min: 'Не менее 6 символов',
+      oneOf: 'Пароли должны совпадать',
+      notOneOf: 'Должно быть уникальным',
+      error409: 'Такой пользователь уже существует',
+      error401: 'Неверные имя пользователя или пароль',
+    },
+  },
+};

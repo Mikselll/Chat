@@ -1,9 +1,11 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { selectors as channelsSelectors } from '../../../../slices/channelsSlice.js';
 import { selectors as messagesSelectors } from '../../../../slices/messagesSlice.js';
 
 const Messages = () => {
+  const { t } = useTranslation();
   const channelsList = useSelector(channelsSelectors.selectAll);
   const currentChannelId = useSelector(({ channels }) => channels.currentChannelId);
   const currentChannel = channelsList.find(({ id }) => id === currentChannelId);
@@ -18,7 +20,7 @@ const Messages = () => {
         <p className="m-0">
           <b>{`# ${currentChannelName}`}</b>
         </p>
-        <span className="text-muted">{`${messagesLength} сообщений`}</span>
+        <span className="text-muted">{t('messages.message', { count: messagesLength })}</span>
       </div>
       <div className="chat-messages overflow-auto px-5">
         {currentMessages.map(({ text, username, id }) => (

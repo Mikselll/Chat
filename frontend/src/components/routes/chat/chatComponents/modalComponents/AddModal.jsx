@@ -4,18 +4,19 @@ import {
 } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFormik } from 'formik';
+import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import socket from '../../../../../socket.js';
 import { selectors as channelsSelectors, setCurrentChannelId } from '../../../../../slices/channelsSlice.js';
-import { setChannelId, setModalType } from '../../../../../slices/modalsSlice.js';
+import { setModalType } from '../../../../../slices/modalsSlice.js';
 
 const AddModal = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const inputEl = useRef();
   const channelsList = useSelector(channelsSelectors.selectAll);
   const channelsNames = channelsList.map(({ name }) => name);
 
-  const resetChannelId = () => dispatch(setChannelId(null));
   const resetModalType = () => dispatch(setModalType(null));
 
   const formik = useFormik({
@@ -23,7 +24,7 @@ const AddModal = () => {
       name: '',
     },
     validationSchema: yup.object({
-      name: yup.string().notOneOf(channelsNames, 'Должно быть уникальным').required('Обязательное поле'),
+      name: yup.string().notOneOf(channelsNames, t('errors.notOneOf')).required(t('errors.required')),
     }),
     onSubmit: ({ name }) => {
       socket.emit('newChannel', { name }, (response) => {
@@ -42,11 +43,11 @@ const AddModal = () => {
     <Modal
       centered
       show
-      onHide={resetChannelId}
+      onHide={resetModalType}
     >
       <Modal.Header closeButton>
         <Modal.Title>
-          Добавить канал
+          {t('modals.addTitle')}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -62,7 +63,7 @@ const AddModal = () => {
               onChange={formik.handleChange}
               isInvalid={formik.errors.name}
             />
-            <Form.Label htmlFor="name" className="visually-hidden">Имя канала</Form.Label>
+            <Form.Label htmlFor="name" className="visually-hidden">{t('modals.lable')}</Form.Label>
             <Form.Control.Feedback type="invalid">
               {formik.errors.name}
             </Form.Control.Feedback>
@@ -73,13 +74,13 @@ const AddModal = () => {
                 className="me-2"
                 onClick={resetModalType}
               >
-                Отменить
+                {t('modals.cancelButton')}
               </Button>
               <Button
                 type="submit"
                 variant="primary"
               >
-                Отправить
+                {t('modals.sendButton')}
               </Button>
             </div>
           </Form.Group>

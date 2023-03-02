@@ -3,10 +3,12 @@ import {
   Button, Nav, Dropdown, ButtonGroup,
 } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { selectors as channelsSelectors, setCurrentChannelId } from '../../../../slices/channelsSlice.js';
 import { setModalType, setChannelId } from '../../../../slices/modalsSlice.js';
 
 const Channels = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const channelsList = useSelector(channelsSelectors.selectAll);
   const currentChannelId = useSelector(({ channels }) => channels.currentChannelId);
@@ -16,7 +18,7 @@ const Channels = () => {
   return (
     <>
       <div className="d-flex justify-content-between mb-2 ps-4 pe-2">
-        <span>Каналы</span>
+        <span>{t('channels.title')}</span>
         <Button
           type="button"
           variant=""
@@ -59,11 +61,11 @@ const Channels = () => {
                     variant={channel.id === currentChannelId ? 'secondary' : ''}
                     className="flex-grow-0"
                   >
-                    <span className="visually-hidden">Управление каналом</span>
+                    <span className="visually-hidden">{t('channels.control')}</span>
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
-                    <Dropdown.Item onClick={removeChannel}>Удалить</Dropdown.Item>
-                    <Dropdown.Item onClick={renameChannel}>Переименовать</Dropdown.Item>
+                    <Dropdown.Item onClick={removeChannel}>{t('channels.remove')}</Dropdown.Item>
+                    <Dropdown.Item onClick={renameChannel}>{t('channels.rename')}</Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
               ) : (

@@ -4,6 +4,7 @@ import {
 } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import useAuth from '../../../hook/index.js';
 import { addChannels, setCurrentChannelId } from '../../../slices/channelsSlice.js';
@@ -14,6 +15,7 @@ import MessegesForm from './chatComponents/MessegesForm.jsx';
 import Modal from './chatComponents/Modal.jsx';
 
 const Chat = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const auth = useAuth();
@@ -40,13 +42,13 @@ const Chat = () => {
       <div className="d-flex flex-column h-100">
         <Navbar bg="white" expand="lg" className="shadow-sm">
           <Container>
-            <a className="navbar-brand" to="/">Hexlet Chat</a>
+            <a className="navbar-brand" to="/">{t('header.brand')}</a>
             <Button
               type="button"
               variant="primary"
               onClick={handleClick}
             >
-              Выйти
+              {t('header.button')}
             </Button>
           </Container>
         </Navbar>

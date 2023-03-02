@@ -3,10 +3,12 @@ import {
   Modal, Button,
 } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import socket from '../../../../../socket.js';
 import { setModalType } from '../../../../../slices/modalsSlice.js';
 
 const RemoveModal = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const id = useSelector(({ modals }) => modals.channelId);
 
@@ -24,11 +26,11 @@ const RemoveModal = () => {
     >
       <Modal.Header closeButton>
         <Modal.Title>
-          Добавить канал
+          {t('modals.removeTitle')}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <p className="lead">Уверены ?</p>
+        <p className="lead">{t('modals.removeConfirm')}</p>
         <div className="d-flex justify-content-end">
           <Button
             type="button"
@@ -36,14 +38,14 @@ const RemoveModal = () => {
             className="me-2"
             onClick={resetModalType}
           >
-            Отменить
+            {t('modals.cancelButton')}
           </Button>
           <Button
             type="button"
             variant="danger"
             onClick={handleRemoveChannel}
           >
-            Удалить
+            {t('modals.removeButton')}
           </Button>
         </div>
       </Modal.Body>
