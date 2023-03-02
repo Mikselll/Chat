@@ -5,9 +5,10 @@ import axios from 'axios';
 import useAuth from '../../../hook/index.js';
 import { addChannels, setCurrentChannelId } from '../../../slices/channelsSlice.js';
 import { addMessages } from '../../../slices/messagesSlice.js';
-import ChannelsList from './components/ChannelsList.jsx';
-import Messages from './components/Messeges.jsx';
-import MessegesForm from './components/MessegesForm';
+import ChannelsList from './chatComponents/ChannelsList.jsx';
+import Messages from './chatComponents/Messeges.jsx';
+import MessegesForm from './chatComponents/MessegesForm.jsx';
+import Modal from './chatComponents/Modal.jsx';
 
 const Chat = () => {
   const dispatch = useDispatch();
@@ -26,19 +27,24 @@ const Chat = () => {
   }, [dispatch]);
 
   return (
-    <Container className="h-100 my-4 overflow-hidden rounded shadow">
-      <Row className="h-100 bg-white flex-md-row">
-        <Col xs={4} md={2} className="border-end pt-5 px-0 bg-light">
-          <ChannelsList />
-        </Col>
-        <Col className="p-0 h-100">
-          <div className="d-flex flex-column h-100">
-            <Messages />
-            <MessegesForm />
-          </div>
-        </Col>
-      </Row>
-    </Container>
+    <>
+      <div className="d-flex flex-column h-100">
+        <Container className="h-100 my-4 overflow-hidden rounded shadow">
+          <Row className="h-100 bg-white flex-md-row">
+            <Col xs={4} md={2} className="border-end pt-5 px-0 bg-light">
+              <ChannelsList />
+            </Col>
+            <Col className="p-0 h-100">
+              <div className="d-flex flex-column h-100">
+                <Messages />
+                <MessegesForm />
+              </div>
+            </Col>
+          </Row>
+        </Container>
+      </div>
+      <Modal />
+    </>
   );
 };
 

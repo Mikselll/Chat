@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Form, InputGroup, Button } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { useFormik } from 'formik';
+import * as yup from 'yup';
 import useAuth from '../../../../hook/index.js';
 import socket from '../../../../socket.js';
-import { messageSchema } from '../../../../validation/index.js';
 
 const MessagesForm = () => {
+  const inputEl = useRef();
   const auth = useAuth();
   const { username } = auth.user;
   const currentChannelId = useSelector(({ channels }) => channels.currentChannelId);
@@ -15,12 +16,18 @@ const MessagesForm = () => {
     initialValues: {
       text: '',
     },
-    validationSchema: messageSchema,
+    validationSchema: yup.object({
+      text: yup.string().required(),
+    }),
     onSubmit: ({ text }, { resetForm }) => {
       socket.emit('newMessage', { text, username, channelId: currentChannelId });
       resetForm();
     },
   });
+
+  useEffect(() => {
+    inputEl.current.focus();
+  }, []);
 
   return (
     <div className="mt-auto px-5 py-3">
@@ -35,12 +42,12 @@ const MessagesForm = () => {
             aria-label="Новое сообщение"
             placeholder="Введите сообщение..."
             className="border-0 p-0 ps-2"
-            onChange={formik.handleChange}
+            ref={inputEl}
             value={formik.values.text}
+            onChange={formik.handleChange}
           />
           <Button
             type="submit"
-            disabled=""
             variant=""
             className="btn-group-vertical"
           >

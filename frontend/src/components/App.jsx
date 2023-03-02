@@ -10,6 +10,7 @@ import AuthContext from '../context/index.js';
 import useAuth from '../hook/index.js';
 import socket from '../socket.js';
 import { addMessage } from '../slices/messagesSlice.js';
+import { addChannel, removeChannel, renameChannel } from '../slices/channelsSlice.js';
 
 const AuthProvider = ({ children }) => {
   const currentUsername = JSON.parse(localStorage.getItem('user'));
@@ -38,8 +39,16 @@ const App = () => {
 
   useEffect(() => {
     socket.on('newMessage', (payload) => {
-      console.log(payload)
       dispatch(addMessage(payload));
+    });
+    socket.on('newChannel', (payload) => {
+      dispatch(addChannel(payload));
+    });
+    socket.on('removeChannel', (payload) => {
+      dispatch(removeChannel(payload.id));
+    });
+    socket.on('renameChannel', (payload) => {
+      dispatch(renameChannel(payload));
     });
   }, [dispatch]);
 

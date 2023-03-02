@@ -4,10 +4,10 @@ import {
 } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
+import * as yup from 'yup';
 import axios from 'axios';
 import useAuth from '../../hook/index.js';
 import image from '../../assets/avatar.jpg';
-import { loginSchema } from '../../validation/index.js';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -18,7 +18,10 @@ const Login = () => {
       username: '',
       password: '',
     },
-    validationSchema: loginSchema,
+    validationSchema: yup.object({
+      username: yup.string().required('Обязательно поле'),
+      password: yup.string().required('Обязательное поле'),
+    }),
     onSubmit: async (values) => {
       try {
         const { data } = await axios.post('/api/v1/login', values);
@@ -39,7 +42,10 @@ const Login = () => {
               <Col xs={12} md={6} className="d-flex align-items-center justify-content-center">
                 <img src={image} className="rounded-circle" alt="Войти" />
               </Col>
-              <Form className="col-12 col-md-6 mt-3 mt-mb-0" onSubmit={formik.handleSubmit}>
+              <Form
+                className="col-12 col-md-6 mt-3 mt-mb-0"
+                onSubmit={formik.handleSubmit}
+              >
                 <h1 className="text-center mb-4">Войти</h1>
                 <Form.Group className="form-floating mb-3">
                   <Form.Control
