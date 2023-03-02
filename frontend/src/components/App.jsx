@@ -4,6 +4,7 @@ import {
 } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import Login from './routes/LoginPage.jsx';
+import Signup from './routes/SignupPage.jsx';
 import NotFound from './routes/PageNotFound.jsx';
 import Chat from './routes/chat/ChatPage.jsx';
 import AuthContext from '../context/index.js';
@@ -19,8 +20,18 @@ const AuthProvider = ({ children }) => {
     localStorage.setItem('user', JSON.stringify(data));
     setUser(data);
   };
+  const signUp = (data) => {
+    localStorage.setItem('user', JSON.stringify(data));
+    setUser(data);
+  };
+  const signOut = () => {
+    localStorage.removeItem('user');
+    setUser(null);
+  };
 
-  const authServices = useMemo(() => ({ logIn, user }), [user]);
+  const authServices = useMemo(() => ({
+    logIn, signUp, signOut, user,
+  }), [user]);
 
   return (
     <AuthContext.Provider value={authServices}>
@@ -60,6 +71,7 @@ const App = () => {
             <Route index="true" element={<Chat />} />
           </Route>
           <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

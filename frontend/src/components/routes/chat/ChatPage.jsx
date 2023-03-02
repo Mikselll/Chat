@@ -1,5 +1,8 @@
 import React, { useEffect } from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
+import {
+  Container, Row, Col, Navbar, Button,
+} from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import useAuth from '../../../hook/index.js';
@@ -12,7 +15,13 @@ import Modal from './chatComponents/Modal.jsx';
 
 const Chat = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const auth = useAuth();
+
+  const handleClick = () => {
+    auth.signOut();
+    navigate('/login');
+  };
 
   useEffect(() => {
     const getData = async () => {
@@ -29,6 +38,18 @@ const Chat = () => {
   return (
     <>
       <div className="d-flex flex-column h-100">
+        <Navbar bg="white" expand="lg" className="shadow-sm">
+          <Container>
+            <a className="navbar-brand" to="/">Hexlet Chat</a>
+            <Button
+              type="button"
+              variant="primary"
+              onClick={handleClick}
+            >
+              Выйти
+            </Button>
+          </Container>
+        </Navbar>
         <Container className="h-100 my-4 overflow-hidden rounded shadow">
           <Row className="h-100 bg-white flex-md-row">
             <Col xs={4} md={2} className="border-end pt-5 px-0 bg-light">
