@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Form, Button, Container, Row, Card, Col, Image, Navbar,
 } from 'react-bootstrap';
@@ -14,6 +14,7 @@ import image from '../../assets/avatar.jpg';
 const Login = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const inputEl = useRef();
   const auth = useAuth();
   const [error401, setError] = useState(false);
 
@@ -40,6 +41,10 @@ const Login = () => {
       }
     },
   });
+
+  useEffect(() => {
+    inputEl.current.focus();
+  }, []);
 
   return (
     <div className="d-flex flex-column h-100">
@@ -68,6 +73,7 @@ const Login = () => {
                       type="username"
                       required
                       placeholder={t('login.username')}
+                      ref={inputEl}
                       value={formik.values.username}
                       onBlur={formik.handleBlur}
                       onChange={formik.handleChange}
