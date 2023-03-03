@@ -86,7 +86,7 @@ const Signup = () => {
                       placeholder={t('errors.min')}
                       value={formik.values.password}
                       onChange={formik.handleChange}
-                      isInvalid={formik.errors.password}
+                      isInvalid={formik.errors.password && formik.touched.password}
                     />
                     <Form.Label htmlFor="pasword">{t('signup.password')}</Form.Label>
                     <Form.Control.Feedback className="invalid-tooltip">{formik.errors.password}</Form.Control.Feedback>
