@@ -3,11 +3,13 @@ import { Form, InputGroup, Button } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
+import filter from 'leo-profanity';
 import * as yup from 'yup';
 import useAuth from '../../../../hook/index.js';
 import socket from '../../../../socket.js';
 
 const MessagesForm = () => {
+  filter.loadDictionary('ru');
   const { t } = useTranslation();
   const inputEl = useRef();
   const auth = useAuth();
@@ -22,7 +24,7 @@ const MessagesForm = () => {
       text: yup.string().required(),
     }),
     onSubmit: ({ text }, { resetForm }) => {
-      socket.emit('newMessage', { text, username, channelId: currentChannelId });
+      socket.emit('newMessage', { text: filter.clean(text), username, channelId: currentChannelId });
       resetForm();
     },
   });
