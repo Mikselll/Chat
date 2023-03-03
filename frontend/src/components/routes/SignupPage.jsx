@@ -71,6 +71,7 @@ const Signup = () => {
                       required
                       placeholder={t('errors.minMax')}
                       value={formik.values.username}
+                      onBlur={formik.handleBlur}
                       onChange={formik.handleChange}
                       isInvalid={formik.errors.username || error409}
                     />
@@ -85,6 +86,7 @@ const Signup = () => {
                       required
                       placeholder={t('errors.min')}
                       value={formik.values.password}
+                      onBlur={formik.handleBlur}
                       onChange={formik.handleChange}
                       isInvalid={formik.errors.password && formik.touched.password}
                     />
@@ -99,6 +101,7 @@ const Signup = () => {
                       required
                       placeholder={t('errors.oneOf')}
                       value={formik.values.confirmPassword}
+                      onBlur={formik.handleBlur}
                       onChange={formik.handleChange}
                       isInvalid={formik.errors.confirmPassword}
                     />

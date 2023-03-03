@@ -69,6 +69,7 @@ const Login = () => {
                       required
                       placeholder={t('login.username')}
                       value={formik.values.username}
+                      onBlur={formik.handleBlur}
                       onChange={formik.handleChange}
                       isInvalid={error401}
                     />
@@ -82,6 +83,7 @@ const Login = () => {
                       required
                       placeholder={t('login.password')}
                       value={formik.values.password}
+                      onBlur={formik.handleBlur}
                       onChange={formik.handleChange}
                       isInvalid={error401}
                     />
