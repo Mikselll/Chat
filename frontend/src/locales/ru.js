@@ -30,9 +30,12 @@ export default {
       button: 'Отправить',
     },
     modals: {
+      addToast: 'Канал создан',
       addTitle: 'Добавить канал',
+      removeToast: 'Канал удален',
       removeTitle: 'Удалить канал',
       removeConfirm: 'Уверены ?',
+      renameToast: 'Канал переименован',
       renameTitle: 'Переименовать канал',
       cancelButton: 'Отменить',
       sendButton: 'Отправить',
@@ -51,6 +54,7 @@ export default {
       notOneOf: 'Должно быть уникальным',
       error409: 'Такой пользователь уже существует',
       error401: 'Неверные имя пользователя или пароль',
+      toastError: 'Ошибка соединения',
     },
   },
 };

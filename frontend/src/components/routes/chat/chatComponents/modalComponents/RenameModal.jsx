@@ -5,6 +5,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import * as yup from 'yup';
 import socket from '../../../../../socket.js';
 import { selectors as channelsSelectors } from '../../../../../slices/channelsSlice.js';
@@ -29,6 +30,7 @@ const RenameModal = () => {
     }),
     onSubmit: (({ name }) => {
       socket.emit('renameChannel', { name, id });
+      toast.success(t('modals.renameToast'));
       resetModalType();
     }),
   });

@@ -4,6 +4,7 @@ import {
 } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import socket from '../../../../../socket.js';
 import { setModalType } from '../../../../../slices/modalsSlice.js';
 
@@ -15,6 +16,7 @@ const RemoveModal = () => {
   const resetModalType = () => dispatch(setModalType(null));
   const handleRemoveChannel = () => {
     socket.emit('removeChannel', { id });
+    toast.success(t('modals.removeToast'));
     resetModalType();
   };
 

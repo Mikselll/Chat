@@ -5,6 +5,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import * as yup from 'yup';
 import axios from 'axios';
 import useAuth from '../../hook/index.js';
@@ -33,8 +34,9 @@ const Login = () => {
       } catch (error) {
         if (error.response.status === 401) {
           setError(true);
+          return;
         }
-        console.error(error.message);
+        toast.error(t('errors.toastError'));
       }
     },
   });
