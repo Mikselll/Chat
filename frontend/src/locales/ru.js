@@ -15,6 +15,11 @@ export default {
       confirmPassword: 'Подтвердите пароль',
       button: 'Зарегистрироваться',
     },
+    notFound: {
+      title: 'Страница не найдена',
+      footerText: 'Но вы можете перейти ',
+      footerLink: 'на главную страницу',
+    },
     channels: {
       title: 'Каналы',
       control: 'Управление каналом',
