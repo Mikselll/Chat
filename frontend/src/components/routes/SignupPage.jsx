@@ -96,7 +96,7 @@ const Signup = () => {
                       onChange={formik.handleChange}
                       isInvalid={formik.errors.password && formik.touched.password}
                     />
-                    <Form.Label htmlFor="pasword">{t('signup.password')}</Form.Label>
+                    <Form.Label htmlFor="password">{t('signup.password')}</Form.Label>
                     <Form.Control.Feedback className="invalid-tooltip">{formik.errors.password}</Form.Control.Feedback>
                   </Form.Group>
                   <Form.Group className="form-floating mb-3">
@@ -111,7 +111,7 @@ const Signup = () => {
                       onChange={formik.handleChange}
                       isInvalid={formik.errors.confirmPassword}
                     />
-                    <Form.Label htmlFor="confirmPaswword">{t('signup.confirmPassword')}</Form.Label>
+                    <Form.Label htmlFor="confirmPassword">{t('signup.confirmPassword')}</Form.Label>
                     <Form.Control.Feedback className="invalid-tooltip">{formik.errors.confirmPassword}</Form.Control.Feedback>
                   </Form.Group>
                   <Button
