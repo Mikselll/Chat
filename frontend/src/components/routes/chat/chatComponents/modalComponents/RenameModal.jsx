@@ -15,15 +15,17 @@ const RenameModal = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const inputEl = useRef();
+  const id = useSelector(({ modals }) => modals.channelId);
   const channelsList = useSelector(channelsSelectors.selectAll);
   const channelsNames = channelsList.map(({ name }) => name);
-  const id = useSelector(({ modals }) => modals.channelId);
+  const currentChannel = channelsList.find((channel) => channel.id === id);
+  const currentChannelName = currentChannel.name;
 
   const resetModalType = () => dispatch(setModalType(null));
 
   const formik = useFormik({
     initialValues: {
-      name: '',
+      name: currentChannelName,
     },
     validationSchema: yup.object({
       name: yup.string().notOneOf(channelsNames, t('errors.notOneOf')).required(t('errors.required')),
@@ -36,7 +38,7 @@ const RenameModal = () => {
   });
 
   useEffect(() => {
-    inputEl.current.focus();
+    inputEl.current.select();
   }, []);
 
   return (
