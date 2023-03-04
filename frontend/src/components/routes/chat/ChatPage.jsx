@@ -19,6 +19,7 @@ const Chat = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const auth = useAuth();
+  const { token } = auth.user;
 
   const handleClick = () => {
     auth.signOut();
@@ -27,7 +28,6 @@ const Chat = () => {
 
   useEffect(() => {
     const getData = async () => {
-      const { token } = auth.user;
       const response = await axios.get('/api/v1/data', { headers: { Authorization: `Bearer ${token}` } });
       const { channels, messages, currentChannelId } = response.data;
       dispatch(addChannels(channels));
