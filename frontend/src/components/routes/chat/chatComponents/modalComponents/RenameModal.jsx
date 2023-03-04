@@ -65,7 +65,7 @@ const RenameModal = () => {
               onChange={formik.handleChange}
               isInvalid={formik.errors.name}
             />
-            <Form.Label className="visually-hidden">{t('modals.lable')}</Form.Label>
+            <Form.Label htmlFor="name" className="visually-hidden">{t('modals.lable')}</Form.Label>
             <Form.Control.Feedback type="invalid">
               {formik.errors.name}
             </Form.Control.Feedback>
