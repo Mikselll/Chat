@@ -37,7 +37,7 @@ export default {
     modals: {
       addToast: 'Канал создан',
       addTitle: 'Добавить канал',
-      removeToast: 'Канал удален',
+      removeToast: 'Канал удалён',
       removeTitle: 'Удалить канал',
       removeConfirm: 'Уверены ?',
       renameToast: 'Канал переименован',
