@@ -1,8 +1,8 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import AddModal from './modalComponents/AddModal.jsx';
-import RemoveModal from './modalComponents/RemoveModal.jsx';
-import RenameModal from './modalComponents/RenameModal.jsx';
+import AddModal from './AddModal.jsx';
+import RemoveModal from './RemoveModal.jsx';
+import RenameModal from './RenameModal.jsx';
 
 const modalComponents = {
   adding: AddModal,

@@ -4,7 +4,7 @@ import {
 } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import image from '../../assets/avatar_2.jpg';
+import image from '../assets/avatar_2.jpg';
 
 const NotFound = () => {
   const { t } = useTranslation();

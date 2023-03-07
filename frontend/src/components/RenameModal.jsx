@@ -7,38 +7,39 @@ import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import * as yup from 'yup';
-import socket from '../../../../../socket.js';
-import { selectors as channelsSelectors, setCurrentChannelId } from '../../../../../slices/channelsSlice.js';
-import { setModalType } from '../../../../../slices/modalsSlice.js';
+import { useSocket } from '../hooks/index.js';
+import { selectors as channelsSelectors } from '../slices/channelsSlice.js';
+import { setModalType } from '../slices/modalsSlice.js';
 
-const AddModal = () => {
+const RenameModal = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const socket = useSocket();
   const inputEl = useRef();
+  const id = useSelector(({ modals }) => modals.channelId);
   const channelsList = useSelector(channelsSelectors.selectAll);
   const channelsNames = channelsList.map(({ name }) => name);
+  const currentChannel = channelsList.find((channel) => channel.id === id);
+  const currentChannelName = currentChannel.name;
 
   const resetModalType = () => dispatch(setModalType(null));
 
   const formik = useFormik({
     initialValues: {
-      name: '',
+      name: currentChannelName,
     },
     validationSchema: yup.object({
       name: yup.string().notOneOf(channelsNames, t('errors.notOneOf')).required(t('errors.required')),
     }),
-    onSubmit: ({ name }) => {
-      socket.emit('newChannel', { name }, (response) => {
-        const { data } = response;
-        dispatch(setCurrentChannelId(data.id));
-      });
-      toast.success(t('modals.addToast'));
+    onSubmit: (({ name }) => {
+      socket.renameChannel(name, id);
+      toast.success(t('modals.renameToast'));
       resetModalType();
-    },
+    }),
   });
 
   useEffect(() => {
-    inputEl.current.focus();
+    inputEl.current.select();
   }, []);
 
   return (
@@ -49,7 +50,7 @@ const AddModal = () => {
     >
       <Modal.Header closeButton>
         <Modal.Title>
-          {t('modals.addTitle')}
+          {t('modals.renameTitle')}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -92,4 +93,4 @@ const AddModal = () => {
   );
 };
 
-export default AddModal;
+export default RenameModal;

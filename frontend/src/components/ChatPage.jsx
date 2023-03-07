@@ -6,29 +6,28 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
-import useAuth from '../../../hook/index.js';
-import { addChannels, setCurrentChannelId } from '../../../slices/channelsSlice.js';
-import { addMessages } from '../../../slices/messagesSlice.js';
-import ChannelsList from './chatComponents/ChannelsList.jsx';
-import Messages from './chatComponents/Messeges.jsx';
-import MessegesForm from './chatComponents/MessegesForm.jsx';
-import Modal from './chatComponents/Modal.jsx';
+import { useAuth } from '../hooks/index.js';
+import { addChannels, setCurrentChannelId } from '../slices/channelsSlice.js';
+import { addMessages } from '../slices/messagesSlice.js';
+import ChannelsList from './ChannelsList.jsx';
+import Messages from './Messeges.jsx';
+import MessegesForm from './MessegesForm.jsx';
+import Modal from './Modal.jsx';
 
 const Chat = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const auth = useAuth();
-  const { token } = auth.user;
 
   const handleClick = () => {
-    auth.signOut();
+    auth.logOut();
     navigate('/login');
   };
 
   useEffect(() => {
     const getData = async () => {
-      const response = await axios.get('/api/v1/data', { headers: { Authorization: `Bearer ${token}` } });
+      const response = await axios.get('/api/v1/data', { headers: auth.getAuthHeader() });
       const { channels, messages, currentChannelId } = response.data;
       dispatch(addChannels(channels));
       dispatch(setCurrentChannelId(currentChannelId));

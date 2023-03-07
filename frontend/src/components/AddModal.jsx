@@ -7,38 +7,36 @@ import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import * as yup from 'yup';
-import socket from '../../../../../socket.js';
-import { selectors as channelsSelectors } from '../../../../../slices/channelsSlice.js';
-import { setModalType } from '../../../../../slices/modalsSlice.js';
+import { useSocket } from '../hooks/index.js';
+import { selectors as channelsSelectors } from '../slices/channelsSlice.js';
+import { setModalType } from '../slices/modalsSlice.js';
 
-const RenameModal = () => {
+const AddModal = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const socket = useSocket();
   const inputEl = useRef();
-  const id = useSelector(({ modals }) => modals.channelId);
   const channelsList = useSelector(channelsSelectors.selectAll);
   const channelsNames = channelsList.map(({ name }) => name);
-  const currentChannel = channelsList.find((channel) => channel.id === id);
-  const currentChannelName = currentChannel.name;
 
   const resetModalType = () => dispatch(setModalType(null));
 
   const formik = useFormik({
     initialValues: {
-      name: currentChannelName,
+      name: '',
     },
     validationSchema: yup.object({
       name: yup.string().notOneOf(channelsNames, t('errors.notOneOf')).required(t('errors.required')),
     }),
-    onSubmit: (({ name }) => {
-      socket.emit('renameChannel', { name, id });
-      toast.success(t('modals.renameToast'));
+    onSubmit: ({ name }) => {
+      socket.addChannel(name);
+      toast.success(t('modals.addToast'));
       resetModalType();
-    }),
+    },
   });
 
   useEffect(() => {
-    inputEl.current.select();
+    inputEl.current.focus();
   }, []);
 
   return (
@@ -49,7 +47,7 @@ const RenameModal = () => {
     >
       <Modal.Header closeButton>
         <Modal.Title>
-          {t('modals.renameTitle')}
+          {t('modals.addTitle')}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -92,4 +90,4 @@ const RenameModal = () => {
   );
 };
 
-export default RenameModal;
+export default AddModal;

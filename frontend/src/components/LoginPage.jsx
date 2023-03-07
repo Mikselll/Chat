@@ -8,8 +8,8 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import * as yup from 'yup';
 import axios from 'axios';
-import useAuth from '../../hook/index.js';
-import image from '../../assets/avatar.jpg';
+import { useAuth } from '../hooks/index.js';
+import image from '../assets/avatar.jpg';
 
 const Login = () => {
   const { t } = useTranslation();
