@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import * as yup from 'yup';
 import { useSocket } from '../hooks/index.js';
-import { selectors as channelsSelectors } from '../slices/channelsSlice.js';
+import { selectors as channelsSelectors, setCurrentChannelId } from '../slices/channelsSlice.js';
 import { setModalType } from '../slices/modalsSlice.js';
 
 const AddModal = () => {
@@ -29,7 +29,7 @@ const AddModal = () => {
       name: yup.string().notOneOf(channelsNames, t('errors.notOneOf')).required(t('errors.required')),
     }),
     onSubmit: ({ name }) => {
-      socket.addChannel(name);
+      socket.newChannel(name).then(({ data }) => dispatch(setCurrentChannelId(data.id)));
       toast.success(t('modals.addToast'));
       resetModalType();
     },

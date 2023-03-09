@@ -9,10 +9,6 @@ import resources from './locales/index.js';
 import App from './components/App.jsx';
 import AuthProvider from './components/AuthProvider.jsx';
 import SocketProvider from './components/SocketProvider.jsx';
-import {
-  addChannel, removeChannel, renameChannel,
-} from './slices/channelsSlice.js';
-import { addMessage } from './slices/messagesSlice.js';
 
 const init = async (socket) => {
   const i18n = i18next.createInstance();
@@ -27,22 +23,9 @@ const init = async (socket) => {
     });
 
   const rollbarConfig = {
-    accessToken: 'dbfb30f893004347b01163ad9354a16b',
+    accessToken: process.env.REACT_APP_ROLLBAR_ACCESS_TOKEN,
     environment: 'production',
   };
-
-  socket.on('newMessage', (payload) => {
-    store.dispatch(addMessage(payload));
-  });
-  socket.on('newChannel', (payload) => {
-    store.dispatch(addChannel(payload));
-  });
-  socket.on('removeChannel', (payload) => {
-    store.dispatch(removeChannel(payload.id));
-  });
-  socket.on('renameChannel', (payload) => {
-    store.dispatch(renameChannel(payload));
-  });
 
   return (
     <React.StrictMode>

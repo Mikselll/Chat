@@ -16,7 +16,7 @@ const RemoveModal = () => {
 
   const resetModalType = () => dispatch(setModalType(null));
   const handleRemoveChannel = () => {
-    socket.removeChannel(id);
+    socket.remove(id);
     toast.success(t('modals.removeToast'));
     resetModalType();
   };

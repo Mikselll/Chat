@@ -1,34 +1,45 @@
 import React, { useMemo } from 'react';
-import { useDispatch } from 'react-redux';
-import filter from 'leo-profanity';
 import { SocketContext } from '../contexts/index.js';
-import { setCurrentChannelId } from '../slices/channelsSlice.js';
+import store from '../slices/index.js';
+import {
+  addChannel, removeChannel, renameChannel,
+} from '../slices/channelsSlice.js';
+import { addMessage } from '../slices/messagesSlice.js';
 
 const SocketProvider = ({ children, socket }) => {
-  filter.loadDictionary('ru');
-  const dispatch = useDispatch();
-
-  const addMessage = (text, username, channelId) => {
-    socket.emit('newMessage', { text: filter.clean(text), username, channelId });
+  const newMessage = (text, username, channelId) => {
+    socket.emit('newMessage', { text, username, channelId });
   };
 
-  const addChannel = (name) => {
+  const newChannel = (name) => new Promise((resolve) => {
     socket.emit('newChannel', { name }, (response) => {
-      const { data } = response;
-      dispatch(setCurrentChannelId(data.id));
+      resolve(response);
     });
-  };
+  });
 
-  const removeChannel = (id) => {
+  const remove = (id) => {
     socket.emit('removeChannel', { id });
   };
 
-  const renameChannel = (name, id) => {
+  const rename = (name, id) => {
     socket.emit('renameChannel', { name, id });
   };
 
+  socket.on('newMessage', (payload) => {
+    store.dispatch(addMessage(payload));
+  });
+  socket.on('newChannel', (payload) => {
+    store.dispatch(addChannel(payload));
+  });
+  socket.on('removeChannel', (payload) => {
+    store.dispatch(removeChannel(payload.id));
+  });
+  socket.on('renameChannel', (payload) => {
+    store.dispatch(renameChannel(payload));
+  });
+
   const socketServices = useMemo(() => ({
-    addMessage, addChannel, removeChannel, renameChannel,
+    newMessage, newChannel, remove, rename,
   }));
 
   return (

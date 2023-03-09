@@ -32,7 +32,7 @@ const RenameModal = () => {
       name: yup.string().notOneOf(channelsNames, t('errors.notOneOf')).required(t('errors.required')),
     }),
     onSubmit: (({ name }) => {
-      socket.renameChannel(name, id);
+      socket.rename(name, id);
       toast.success(t('modals.renameToast'));
       resetModalType();
     }),
