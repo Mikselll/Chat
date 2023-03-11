@@ -27,10 +27,16 @@ const init = async (socket) => {
     environment: 'testenv',
   };
 
+  function TestError() {
+    const a = null;
+    return a.hello();
+  }
+
   return (
     <React.StrictMode>
       <RollbarProvider config={rollbarConfig}>
         <ErrorBoundary>
+          <TestError />
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>
               <SocketProvider socket={socket}>
