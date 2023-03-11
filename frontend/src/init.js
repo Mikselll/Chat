@@ -23,20 +23,14 @@ const init = async (socket) => {
     });
 
   const rollbarConfig = {
-    accessToken: '06ff30b7e7524c99816830cab7ff0f74',
-    environment: 'testenv',
+    accessToken: process.env.REACT_APP_ROLLBAR_ACCESS_TOKEN,
+    environment: 'production',
   };
-
-  function TestError() {
-    const a = null;
-    return a.hello();
-  }
 
   return (
     <React.StrictMode>
       <RollbarProvider config={rollbarConfig}>
         <ErrorBoundary>
-          <TestError />
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>
               <SocketProvider socket={socket}>
