@@ -23,7 +23,7 @@ const init = async (socket) => {
     });
 
   const rollbarConfig = {
-    accessToken: 'dbfb30f893004347b01163ad9354a16b',
+    accessToken: '1b8deefdce6a48b38939622985c6e790',
     environment: 'testenv',
   };
 
