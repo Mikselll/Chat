@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
-  Form, Button, Container, Row, Card, Col, Image, Navbar,
+  Form, Button, Container, Row, Card, Col, Image,
 } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
@@ -10,6 +10,7 @@ import * as yup from 'yup';
 import axios from 'axios';
 import { useAuth } from '../hooks/index.js';
 import image from '../assets/avatar_1.jpg';
+import Header from './Header.jsx';
 
 const Signup = () => {
   const { t } = useTranslation();
@@ -50,11 +51,7 @@ const Signup = () => {
 
   return (
     <div className="d-flex flex-column h-100">
-      <Navbar bg="white" expand="lg" className="shadow-sm">
-        <Container>
-          <a className="navbar-brand" to="/">{t('header.brand')}</a>
-        </Container>
-      </Navbar>
+      <Header />
       <Container className="h-100" fluid>
         <Row className="justify-content-center align-content-center h-100">
           <Col xs={12} md={8} xxl={6}>

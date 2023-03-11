@@ -1,33 +1,15 @@
 import React from 'react';
-import {
-  Navbar, Container, Button, Image,
-} from 'react-bootstrap';
+import { Image } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 import image from '../assets/avatar_2.jpg';
+import Header from './Header';
 
 const NotFound = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
-
-  const handleClick = () => {
-    navigate('/login');
-  };
 
   return (
     <div className="d-flex flex-column h-100">
-      <Navbar bg="white" expand="lg" className="shadow-sm">
-        <Container>
-          <a className="navbar-brand" to="/">{t('header.brand')}</a>
-          <Button
-            type="button"
-            variant="primary"
-            onClick={handleClick}
-          >
-            {t('header.button')}
-          </Button>
-        </Container>
-      </Navbar>
+      <Header />
       <div className="text-center">
         <Image className="h-25" fluid src={image} alt={t('notFound.title')} />
         <h1 className="h4 text-muted">{t('notFound.title')}</h1>

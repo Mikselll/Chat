@@ -23,8 +23,8 @@ const init = async (socket) => {
     });
 
   const rollbarConfig = {
-    accessToken: process.env.REACT_APP_ROLLBAR_ACCESS_TOKEN,
-    environment: 'production',
+    accessToken: 'dbfb30f893004347b01163ad9354a16b',
+    environment: 'testenv',
   };
 
   return (
