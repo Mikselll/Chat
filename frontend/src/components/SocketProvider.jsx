@@ -7,23 +7,22 @@ import {
 import { addMessage } from '../slices/messagesSlice.js';
 
 const SocketProvider = ({ children, socket }) => {
-  const newMessage = (text, username, channelId) => {
-    socket.emit('newMessage', { text, username, channelId });
-  };
-
-  const newChannel = (name) => new Promise((resolve) => {
-    socket.emit('newChannel', { name }, (response) => {
-      resolve(response);
+  const promisify = (actionName, ...arg) => new Promise((resolve, reject) => {
+    socket.emit(actionName, ...arg, (response) => {
+      if (response.status === 'ok') {
+        resolve(response);
+      }
+      reject(new Error('errors.networkError'));
     });
   });
 
-  const remove = (id) => {
-    socket.emit('removeChannel', { id });
-  };
+  const newMessage = (message) => promisify('newMessage', message);
 
-  const rename = (name, id) => {
-    socket.emit('renameChannel', { name, id });
-  };
+  const newChannel = (name) => promisify('newChannel', name);
+
+  const remove = (id) => promisify('removeChannel', id);
+
+  const rename = (channel) => promisify('renameChannel', channel);
 
   socket.on('newMessage', (payload) => {
     store.dispatch(addMessage(payload));

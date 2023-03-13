@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+import { useRollbar } from '@rollbar/react';
 import * as yup from 'yup';
 import { useSocket } from '../hooks/index.js';
 import { selectors as channelsSelectors, setCurrentChannelId } from '../slices/channelsSlice.js';
@@ -14,6 +15,7 @@ import { setModalType } from '../slices/modalsSlice.js';
 const AddModal = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const rollbar = useRollbar();
   const socket = useSocket();
   const inputEl = useRef();
   const channelsList = useSelector(channelsSelectors.selectAll);
@@ -28,10 +30,18 @@ const AddModal = () => {
     validationSchema: yup.object({
       name: yup.string().notOneOf(channelsNames, t('errors.notOneOf')).required(t('errors.required')),
     }),
-    onSubmit: ({ name }) => {
-      socket.newChannel(name).then(({ data }) => dispatch(setCurrentChannelId(data.id)));
-      toast.success(t('modals.addToast'));
-      resetModalType();
+    onSubmit: async ({ name }) => {
+      try {
+        const response = await socket.newChannel({ name });
+        const { id } = response.data;
+        dispatch(setCurrentChannelId(id));
+        toast.success(t('modals.addToast'));
+      } catch (error) {
+        toast.error(t(error.message));
+        rollbar.error(error);
+      } finally {
+        resetModalType();
+      }
     },
   });
 

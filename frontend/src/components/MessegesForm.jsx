@@ -3,6 +3,8 @@ import { Form, InputGroup, Button } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
+import { useRollbar } from '@rollbar/react';
 import * as yup from 'yup';
 import filter from 'leo-profanity';
 import { useAuth, useSocket } from '../hooks/index.js';
@@ -10,6 +12,7 @@ import { useAuth, useSocket } from '../hooks/index.js';
 const MessagesForm = () => {
   filter.loadDictionary('ru');
   const { t } = useTranslation();
+  const rollbar = useRollbar();
   const inputEl = useRef();
   const socket = useSocket();
   const auth = useAuth();
@@ -23,10 +26,16 @@ const MessagesForm = () => {
     validationSchema: yup.object({
       text: yup.string().required(),
     }),
-    onSubmit: ({ text }, { resetForm }) => {
-      const filterText = filter.clean(text);
-      socket.newMessage(filterText, username, currentChannelId);
-      resetForm();
+    onSubmit: async ({ text }, { resetForm }) => {
+      try {
+        const filterText = filter.clean(text);
+        await socket.newMessage({ text: filterText, username, channelId: currentChannelId });
+      } catch (error) {
+        toast.error(t(error.message));
+        rollbar.error(error);
+      } finally {
+        resetForm();
+      }
     },
   });
 

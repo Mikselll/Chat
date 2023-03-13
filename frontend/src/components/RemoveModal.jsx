@@ -5,20 +5,28 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+import { useRollbar } from '@rollbar/react';
 import { useSocket } from '../hooks/index.js';
 import { setModalType } from '../slices/modalsSlice.js';
 
 const RemoveModal = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const rollbar = useRollbar();
   const socket = useSocket();
   const id = useSelector(({ modals }) => modals.channelId);
 
   const resetModalType = () => dispatch(setModalType(null));
-  const handleRemoveChannel = () => {
-    socket.remove(id);
-    toast.success(t('modals.removeToast'));
-    resetModalType();
+  const handleRemoveChannel = async () => {
+    try {
+      await socket.remove({ id });
+      toast.success(t('modals.removeToast'));
+    } catch (error) {
+      toast.error(t(error.message));
+      rollbar.error(error);
+    } finally {
+      resetModalType();
+    }
   };
 
   return (

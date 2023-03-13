@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+import { useRollbar } from '@rollbar/react';
 import * as yup from 'yup';
 import axios from 'axios';
 import { useAuth } from '../hooks/index.js';
@@ -15,6 +16,7 @@ import Header from './Header.jsx';
 const Login = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const rollbar = useRollbar();
   const inputEl = useRef();
   const auth = useAuth();
   const [error401, setError] = useState(false);
@@ -34,11 +36,12 @@ const Login = () => {
         auth.logIn(data);
         navigate('/');
       } catch (error) {
+        rollbar.error(error);
         if (error.response.status === 401) {
           setError(true);
           return;
         }
-        toast.error(t('errors.toastError'));
+        toast.error(t('errors.networkError'));
       }
     },
   });

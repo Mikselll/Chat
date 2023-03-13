@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+import { useRollbar } from '@rollbar/react';
 import * as yup from 'yup';
 import { useSocket } from '../hooks/index.js';
 import { selectors as channelsSelectors } from '../slices/channelsSlice.js';
@@ -14,6 +15,7 @@ import { setModalType } from '../slices/modalsSlice.js';
 const RenameModal = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const rollbar = useRollbar();
   const socket = useSocket();
   const inputEl = useRef();
   const id = useSelector(({ modals }) => modals.channelId);
@@ -31,11 +33,17 @@ const RenameModal = () => {
     validationSchema: yup.object({
       name: yup.string().notOneOf(channelsNames, t('errors.notOneOf')).required(t('errors.required')),
     }),
-    onSubmit: (({ name }) => {
-      socket.rename(name, id);
-      toast.success(t('modals.renameToast'));
-      resetModalType();
-    }),
+    onSubmit: async ({ name }) => {
+      try {
+        await socket.rename({ name, id });
+        toast.success(t('modals.renameToast'));
+      } catch (error) {
+        toast.error(t(error.message));
+        rollbar.error(error);
+      } finally {
+        resetModalType();
+      }
+    },
   });
 
   useEffect(() => {
