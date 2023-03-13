@@ -1,6 +1,6 @@
 import React from 'react';
 import { Navbar, Container, Button } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../hooks/index.js';
 
@@ -17,7 +17,7 @@ const Header = () => {
   return (
     <Navbar bg="white" expand="lg" className="shadow-sm">
       <Container>
-        <a className="navbar-brand" to="/">{t('header.brand')}</a>
+        <Link className="navbar-brand" to="/">{t('header.brand')}</Link>
         {auth.user && (
         <Button
           type="button"

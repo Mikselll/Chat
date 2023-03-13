@@ -1,6 +1,7 @@
 import React from 'react';
 import { Image } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import image from '../assets/avatar_2.jpg';
 import Header from './Header';
 
@@ -15,7 +16,7 @@ const NotFound = () => {
         <h1 className="h4 text-muted">{t('notFound.title')}</h1>
         <p className="text-muted">
           {t('notFound.footerText')}
-          <a href="/">{t('notFound.footerLink')}</a>
+          <Link to="/">{t('notFound.footerLink')}</Link>
         </p>
       </div>
     </div>

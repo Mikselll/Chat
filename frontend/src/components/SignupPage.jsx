@@ -19,6 +19,7 @@ const Signup = () => {
   const rollbar = useRollbar();
   const inputEl = useRef();
   const auth = useAuth();
+  const [isSubmit, setSubmit] = useState(false);
   const [error409, setError] = useState(false);
 
   const formik = useFormik({
@@ -34,14 +35,20 @@ const Signup = () => {
     }),
     onSubmit: async (values) => {
       try {
+        setSubmit(true);
         const { data } = await axios.post('/api/v1/signup', values);
         auth.logIn(data);
+        setSubmit(false);
+        setError(false);
         navigate('/');
       } catch (error) {
+        console.log(error.message);
         rollbar.error(error);
+        if (!error.isAxiosError) {
+          toast.error(t('errors.unknownError'));
+        }
         if (error.response.status === 409) {
           setError(true);
-          return;
         }
         toast.error(t('errors.networkError'));
       }
@@ -117,6 +124,7 @@ const Signup = () => {
                   <Button
                     type="submit"
                     variant="primary"
+                    disabled={isSubmit}
                     className="w-100"
                   >
                     {t('signup.button')}

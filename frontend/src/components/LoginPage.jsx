@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import {
   Form, Button, Container, Row, Card, Col, Image,
 } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
@@ -19,6 +19,7 @@ const Login = () => {
   const rollbar = useRollbar();
   const inputEl = useRef();
   const auth = useAuth();
+  const [isSubmit, setSubmit] = useState(false);
   const [error401, setError] = useState(false);
 
   const formik = useFormik({
@@ -32,14 +33,19 @@ const Login = () => {
     }),
     onSubmit: async (values) => {
       try {
-        const { data } = await axios.post('/api/v1/login', values);
+        setSubmit(true);
+        const { data } = await axios.post('/api/v1/logi', values);
         auth.logIn(data);
+        setSubmit(false);
+        setError(false);
         navigate('/');
       } catch (error) {
         rollbar.error(error);
+        if (!error.isAxiosError) {
+          toast.error(t('errors.unknownError'));
+        }
         if (error.response.status === 401) {
           setError(true);
-          return;
         }
         toast.error(t('errors.networkError'));
       }
@@ -101,6 +107,7 @@ const Login = () => {
                   <Button
                     type="submit"
                     variant="outline-primary"
+                    disabled={isSubmit}
                     className="w-100 mb-3"
                   >
                     {t('login.button')}
@@ -110,7 +117,7 @@ const Login = () => {
               <Card.Footer className="p-4">
                 <div className="text-center">
                   <span>{t('login.footerText')}</span>
-                  <a href="/signup">{t('login.footerLink')}</a>
+                  <Link to="/signup">{t('login.footerLink')}</Link>
                 </div>
               </Card.Footer>
             </Card>
