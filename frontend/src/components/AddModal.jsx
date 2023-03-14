@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
   Modal, Form, Button,
 } from 'react-bootstrap';
@@ -18,7 +18,6 @@ const AddModal = () => {
   const rollbar = useRollbar();
   const socket = useSocket();
   const inputEl = useRef();
-  const [isSubmit, setSubmit] = useState(false);
   const channelsList = useSelector(channelsSelectors.selectAll);
   const channelsNames = channelsList.map(({ name }) => name);
 
@@ -33,14 +32,11 @@ const AddModal = () => {
     }),
     onSubmit: async ({ name }) => {
       try {
-        setSubmit(true);
         const response = await socket.newChannel({ name });
-        setSubmit(false);
         const { id } = response.data;
         dispatch(setCurrentChannelId(id));
         toast.success(t('modals.addToast'));
       } catch (error) {
-        setSubmit(false);
         toast.error(t(error.message));
         rollbar.error(error);
       } finally {
@@ -93,7 +89,7 @@ const AddModal = () => {
               <Button
                 type="submit"
                 variant="primary"
-                disabled={isSubmit}
+                disabled={formik.isSubmitting}
               >
                 {t('modals.sendButton')}
               </Button>

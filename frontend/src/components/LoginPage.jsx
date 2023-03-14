@@ -10,6 +10,7 @@ import { useRollbar } from '@rollbar/react';
 import * as yup from 'yup';
 import axios from 'axios';
 import { useAuth } from '../hooks/index.js';
+import routes from '../routes.js';
 import image from '../assets/avatar.jpg';
 import Header from './Header.jsx';
 
@@ -19,7 +20,6 @@ const Login = () => {
   const rollbar = useRollbar();
   const inputEl = useRef();
   const auth = useAuth();
-  const [isSubmit, setSubmit] = useState(false);
   const [error401, setError] = useState(false);
 
   const formik = useFormik({
@@ -33,14 +33,11 @@ const Login = () => {
     }),
     onSubmit: async (values) => {
       try {
-        setSubmit(true);
-        const { data } = await axios.post('/api/v1/login', values);
+        const { data } = await axios.post(routes.loginPath(), values);
         auth.logIn(data);
-        setSubmit(false);
         setError(false);
-        navigate('/');
+        navigate(routes.chatPagePath());
       } catch (error) {
-        setSubmit(false);
         rollbar.error(error);
         if (!error.isAxiosError) {
           toast.error(t('errors.unknownError'));
@@ -108,7 +105,7 @@ const Login = () => {
                   <Button
                     type="submit"
                     variant="outline-primary"
-                    disabled={isSubmit}
+                    disabled={formik.isSubmitting}
                     className="w-100 mb-3"
                   >
                     {t('login.button')}
@@ -118,7 +115,7 @@ const Login = () => {
               <Card.Footer className="p-4">
                 <div className="text-center">
                   <span>{t('login.footerText')}</span>
-                  <Link to="/signup">{t('login.footerLink')}</Link>
+                  <Link to={routes.signupPagePath()}>{t('login.footerLink')}</Link>
                 </div>
               </Card.Footer>
             </Card>

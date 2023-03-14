@@ -4,6 +4,7 @@ import {
 } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
+import routes from '../routes.js';
 import { useAuth } from '../hooks/index.js';
 import { addChannels, setCurrentChannelId } from '../slices/channelsSlice.js';
 import { addMessages } from '../slices/messagesSlice.js';
@@ -19,7 +20,7 @@ const Chat = () => {
 
   useEffect(() => {
     const getData = async () => {
-      const response = await axios.get('/api/v1/data', { headers: auth.getAuthHeader() });
+      const response = await axios.get(routes.dataPath(), { headers: auth.getAuthHeader() });
       const { channels, messages, currentChannelId } = response.data;
       dispatch(addChannels(channels));
       dispatch(setCurrentChannelId(currentChannelId));

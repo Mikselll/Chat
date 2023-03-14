@@ -10,6 +10,7 @@ import { useRollbar } from '@rollbar/react';
 import * as yup from 'yup';
 import axios from 'axios';
 import { useAuth } from '../hooks/index.js';
+import routes from '../routes.js';
 import image from '../assets/avatar_1.jpg';
 import Header from './Header.jsx';
 
@@ -19,7 +20,6 @@ const Signup = () => {
   const rollbar = useRollbar();
   const inputEl = useRef();
   const auth = useAuth();
-  const [isSubmit, setSubmit] = useState(false);
   const [error409, setError] = useState(false);
 
   const formik = useFormik({
@@ -35,14 +35,11 @@ const Signup = () => {
     }),
     onSubmit: async (values) => {
       try {
-        setSubmit(true);
-        const { data } = await axios.post('/api/v1/signup', values);
+        const { data } = await axios.post(routes.signupPath(), values);
         auth.logIn(data);
-        setSubmit(false);
         setError(false);
-        navigate('/');
+        navigate(routes.chatPagePath());
       } catch (error) {
-        setSubmit(false);
         rollbar.error(error);
         if (!error.isAxiosError) {
           toast.error(t('errors.unknownError'));
@@ -124,7 +121,7 @@ const Signup = () => {
                   <Button
                     type="submit"
                     variant="primary"
-                    disabled={isSubmit}
+                    disabled={formik.isSubmitting}
                     className="w-100"
                   >
                     {t('signup.button')}
