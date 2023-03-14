@@ -42,7 +42,7 @@ const Signup = () => {
         setError(false);
         navigate('/');
       } catch (error) {
-        console.log(error.message);
+        setSubmit(false);
         rollbar.error(error);
         if (!error.isAxiosError) {
           toast.error(t('errors.unknownError'));

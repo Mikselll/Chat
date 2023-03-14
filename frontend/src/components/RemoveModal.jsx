@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Modal, Button,
 } from 'react-bootstrap';
@@ -14,14 +14,18 @@ const RemoveModal = () => {
   const dispatch = useDispatch();
   const rollbar = useRollbar();
   const socket = useSocket();
+  const [isSubmit, setSubmit] = useState(false);
   const id = useSelector(({ modals }) => modals.channelId);
 
   const resetModalType = () => dispatch(setModalType(null));
   const handleRemoveChannel = async () => {
     try {
+      setSubmit(true);
       await socket.remove({ id });
+      setSubmit(false);
       toast.success(t('modals.removeToast'));
     } catch (error) {
+      setSubmit(false);
       toast.error(t(error.message));
       rollbar.error(error);
     } finally {
@@ -54,6 +58,7 @@ const RemoveModal = () => {
           <Button
             type="button"
             variant="danger"
+            disabled={isSubmit}
             onClick={handleRemoveChannel}
           >
             {t('modals.removeButton')}

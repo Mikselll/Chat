@@ -40,6 +40,7 @@ const Login = () => {
         setError(false);
         navigate('/');
       } catch (error) {
+        setSubmit(false);
         rollbar.error(error);
         if (!error.isAxiosError) {
           toast.error(t('errors.unknownError'));

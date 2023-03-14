@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Modal, Form, Button,
 } from 'react-bootstrap';
@@ -18,6 +18,7 @@ const RenameModal = () => {
   const rollbar = useRollbar();
   const socket = useSocket();
   const inputEl = useRef();
+  const [isSubmit, setSubmit] = useState(false);
   const id = useSelector(({ modals }) => modals.channelId);
   const channelsList = useSelector(channelsSelectors.selectAll);
   const channelsNames = channelsList.map(({ name }) => name);
@@ -35,9 +36,12 @@ const RenameModal = () => {
     }),
     onSubmit: async ({ name }) => {
       try {
+        setSubmit(true);
         await socket.rename({ name, id });
+        setSubmit(false);
         toast.success(t('modals.renameToast'));
       } catch (error) {
+        setSubmit(false);
         toast.error(t(error.message));
         rollbar.error(error);
       } finally {
@@ -90,6 +94,7 @@ const RenameModal = () => {
               <Button
                 type="submit"
                 variant="primary"
+                disabled={isSubmit}
               >
                 {t('modals.sendButton')}
               </Button>
