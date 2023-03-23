@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { selectors as channelsSelectors } from '../slices/channelsSlice.js';
@@ -6,6 +6,7 @@ import { selectors as messagesSelectors } from '../slices/messagesSlice.js';
 
 const Messages = () => {
   const { t } = useTranslation();
+  const messagesEndRef = useRef();
   const channelsList = useSelector(channelsSelectors.selectAll);
   const currentChannelId = useSelector(({ channels }) => channels.currentChannelId);
   const currentChannel = channelsList.find(({ id }) => id === currentChannelId);
@@ -13,6 +14,10 @@ const Messages = () => {
   const messagesList = useSelector(messagesSelectors.selectAll);
   const currentMessages = messagesList.filter(({ channelId }) => channelId === currentChannelId);
   const messagesLength = currentMessages.length;
+
+  useEffect(() => {
+    messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+  }, [messagesLength]);
 
   return (
     <>
@@ -29,6 +34,7 @@ const Messages = () => {
             {`: ${text}`}
           </div>
         ))}
+        <div ref={messagesEndRef} />
       </div>
     </>
   );

@@ -20,7 +20,7 @@ const Login = () => {
   const rollbar = useRollbar();
   const inputEl = useRef();
   const auth = useAuth();
-  const [error401, setError] = useState(false);
+  const [UnauthorizedError, setError] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -81,7 +81,7 @@ const Login = () => {
                       value={formik.values.username}
                       onBlur={formik.handleBlur}
                       onChange={formik.handleChange}
-                      isInvalid={error401}
+                      isInvalid={UnauthorizedError}
                     />
                     <Form.Label htmlFor="username">{t('login.username')}</Form.Label>
                   </Form.Group>
@@ -95,7 +95,7 @@ const Login = () => {
                       value={formik.values.password}
                       onBlur={formik.handleBlur}
                       onChange={formik.handleChange}
-                      isInvalid={error401}
+                      isInvalid={UnauthorizedError}
                     />
                     <Form.Label htmlFor="password">{t('login.password')}</Form.Label>
                     <Form.Control.Feedback className="invalid-tooltip">

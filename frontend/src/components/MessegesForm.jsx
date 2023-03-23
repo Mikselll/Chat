@@ -7,14 +7,14 @@ import { toast } from 'react-toastify';
 import { useRollbar } from '@rollbar/react';
 import * as yup from 'yup';
 import filter from 'leo-profanity';
-import { useAuth, useSocket } from '../hooks/index.js';
+import { useAuth, useApi } from '../hooks/index.js';
 
 const MessagesForm = () => {
   filter.loadDictionary('ru');
   const { t } = useTranslation();
   const rollbar = useRollbar();
   const inputEl = useRef();
-  const socket = useSocket();
+  const chatApi = useApi();
   const auth = useAuth();
   const { username } = auth.user;
   const currentChannelId = useSelector(({ channels }) => channels.currentChannelId);
@@ -29,7 +29,7 @@ const MessagesForm = () => {
     onSubmit: async ({ text }, { resetForm }) => {
       try {
         const filterText = filter.clean(text);
-        await socket.newMessage({ text: filterText, username, channelId: currentChannelId });
+        await chatApi.newMessage({ text: filterText, username, channelId: currentChannelId });
       } catch (error) {
         toast.error(t(error.message));
         rollbar.error(error);

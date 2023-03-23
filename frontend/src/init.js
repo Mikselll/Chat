@@ -8,7 +8,7 @@ import store from './slices/index.js';
 import resources from './locales/index.js';
 import App from './components/App.jsx';
 import AuthProvider from './components/AuthProvider.jsx';
-import SocketProvider from './components/SocketProvider.jsx';
+import ApiProvider from './components/ApiProvider.jsx';
 
 const init = async (socket) => {
   const i18n = i18next.createInstance();
@@ -33,12 +33,12 @@ const init = async (socket) => {
         <ErrorBoundary>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>
-              <SocketProvider socket={socket}>
+              <ApiProvider socket={socket}>
                 <AuthProvider>
                   <App />
                   <ToastContainer />
                 </AuthProvider>
-              </SocketProvider>
+              </ApiProvider>
             </I18nextProvider>
           </Provider>
         </ErrorBoundary>

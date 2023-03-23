@@ -10,17 +10,19 @@ const modalsSlice = createSlice({
   name: 'modals',
   initialState,
   reducers: {
-    setModalType(state, { payload }) {
-      state.modalType = payload;
+    openModal: (state, { payload }) => {
+      state.modalType = payload.modalType;
+      state.channelId = payload.channelId;
     },
-    setChannelId(state, { payload }) {
-      state.channelId = payload;
+    closeModal: (state) => {
+      state.modalType = null;
+      state.channelId = null;
     },
   },
 });
 
 export const {
-  setModalType,
-  setChannelId,
+  openModal,
+  closeModal,
 } = modalsSlice.actions;
 export default modalsSlice.reducer;

@@ -1,12 +1,12 @@
 import React, { useMemo } from 'react';
 import { useDispatch } from 'react-redux';
-import { SocketContext } from '../contexts/index.js';
+import { ApiContext } from '../contexts/index.js';
 import {
   addChannel, removeChannel, renameChannel,
 } from '../slices/channelsSlice.js';
 import { addMessage } from '../slices/messagesSlice.js';
 
-const SocketProvider = ({ children, socket }) => {
+const ApiProvider = ({ children, socket }) => {
   const dispatch = useDispatch();
   const promisify = (actionName, ...arg) => new Promise((resolve, reject) => {
     socket
@@ -46,10 +46,10 @@ const SocketProvider = ({ children, socket }) => {
   }));
 
   return (
-    <SocketContext.Provider value={socketServices}>
+    <ApiContext.Provider value={socketServices}>
       {children}
-    </SocketContext.Provider>
+    </ApiContext.Provider>
   );
 };
 
-export default SocketProvider;
+export default ApiProvider;

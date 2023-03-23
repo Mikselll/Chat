@@ -20,7 +20,7 @@ const Signup = () => {
   const rollbar = useRollbar();
   const inputEl = useRef();
   const auth = useAuth();
-  const [error409, setError] = useState(false);
+  const [conflictError, setError] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -83,10 +83,10 @@ const Signup = () => {
                       value={formik.values.username}
                       onBlur={formik.handleBlur}
                       onChange={formik.handleChange}
-                      isInvalid={formik.errors.username || error409}
+                      isInvalid={formik.errors.username || conflictError}
                     />
                     <Form.Label htmlFor="username">{t('signup.username')}</Form.Label>
-                    <Form.Control.Feedback className="invalid-tooltip">{error409 ? t('errors.error409') : formik.errors.username}</Form.Control.Feedback>
+                    <Form.Control.Feedback className="invalid-tooltip">{conflictError ? t('errors.error409') : formik.errors.username}</Form.Control.Feedback>
                   </Form.Group>
                   <Form.Group className="form-floating mb-3">
                     <Form.Control

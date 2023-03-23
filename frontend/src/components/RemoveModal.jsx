@@ -6,22 +6,22 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { useRollbar } from '@rollbar/react';
-import { useSocket } from '../hooks/index.js';
-import { setModalType } from '../slices/modalsSlice.js';
+import { useApi } from '../hooks/index.js';
+import { closeModal } from '../slices/modalsSlice.js';
 
 const RemoveModal = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const rollbar = useRollbar();
-  const socket = useSocket();
+  const chatApi = useApi();
   const [isSubmit, setSubmit] = useState(false);
   const id = useSelector(({ modals }) => modals.channelId);
 
-  const resetModalType = () => dispatch(setModalType(null));
+  const resetModalType = () => dispatch(closeModal());
   const handleRemoveChannel = async () => {
     try {
       setSubmit(true);
-      await socket.remove({ id });
+      await chatApi.remove({ id });
       setSubmit(false);
       toast.success(t('modals.removeToast'));
     } catch (error) {

@@ -8,31 +8,35 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { useRollbar } from '@rollbar/react';
 import * as yup from 'yup';
-import { useSocket } from '../hooks/index.js';
+import { useApi } from '../hooks/index.js';
 import { selectors as channelsSelectors, setCurrentChannelId } from '../slices/channelsSlice.js';
-import { setModalType } from '../slices/modalsSlice.js';
+import { closeModal } from '../slices/modalsSlice.js';
 
 const AddModal = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const rollbar = useRollbar();
-  const socket = useSocket();
+  const chatApi = useApi();
   const inputEl = useRef();
   const channelsList = useSelector(channelsSelectors.selectAll);
   const channelsNames = channelsList.map(({ name }) => name);
 
-  const resetModalType = () => dispatch(setModalType(null));
+  const resetModalType = () => dispatch(closeModal());
 
   const formik = useFormik({
     initialValues: {
       name: '',
     },
     validationSchema: yup.object({
-      name: yup.string().notOneOf(channelsNames, t('errors.notOneOf')).required(t('errors.required')),
+      name: yup.string()
+        .min(3, t('errors.minMax'))
+        .max(20, t('errors.minMax'))
+        .notOneOf(channelsNames, t('errors.notOneOf'))
+        .required(t('errors.required')),
     }),
     onSubmit: async ({ name }) => {
       try {
-        const response = await socket.newChannel({ name });
+        const response = await chatApi.newChannel({ name });
         const { id } = response.data;
         dispatch(setCurrentChannelId(id));
         toast.success(t('modals.addToast'));
